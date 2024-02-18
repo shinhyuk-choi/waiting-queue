@@ -1,9 +1,11 @@
 package com.example.queuewebflux.controller;
 
 import com.example.queuewebflux.dto.AllowUserResponse;
+import com.example.queuewebflux.dto.AllowedUserResponse;
 import com.example.queuewebflux.dto.RegisterUserResponse;
 import com.example.queuewebflux.service.UserQueueService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,6 +35,15 @@ public class UserQueueController {
   ) {
     return userQueueService.allowUser(queue, count)
         .map(allowed -> new AllowUserResponse(count, allowed));
+  }
+
+  @GetMapping("/allowed")
+  public Mono<AllowedUserResponse> isAllowed(
+      @RequestParam(value = "queue", defaultValue = "default") String queue,
+      @RequestParam("user_id") Long userId
+  ) {
+    return userQueueService.isAllowed(queue, userId)
+        .map(AllowedUserResponse::new);
   }
 
 }
