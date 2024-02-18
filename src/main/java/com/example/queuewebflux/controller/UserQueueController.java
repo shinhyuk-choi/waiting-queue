@@ -1,5 +1,6 @@
 package com.example.queuewebflux.controller;
 
+import com.example.queuewebflux.dto.AllowUserResponse;
 import com.example.queuewebflux.dto.RegisterUserResponse;
 import com.example.queuewebflux.service.UserQueueService;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,15 @@ public class UserQueueController {
   ) {
     return userQueueService.registerWaitQueue(queue, userId)
         .map(RegisterUserResponse::new);
+  }
+
+  @PostMapping("/allow")
+  public Mono<AllowUserResponse> allowUser(
+      @RequestParam(value = "queue", defaultValue = "default") String queue,
+      @RequestParam("count") Long count
+  ) {
+    return userQueueService.allowUser(queue, count)
+        .map(allowed -> new AllowUserResponse(count, allowed));
   }
 
 }
