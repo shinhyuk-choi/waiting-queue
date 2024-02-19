@@ -2,6 +2,7 @@ package com.example.queuewebflux.controller;
 
 import com.example.queuewebflux.dto.AllowUserResponse;
 import com.example.queuewebflux.dto.AllowedUserResponse;
+import com.example.queuewebflux.dto.RankNumberResponse;
 import com.example.queuewebflux.dto.RegisterUserResponse;
 import com.example.queuewebflux.service.UserQueueService;
 import lombok.RequiredArgsConstructor;
@@ -46,4 +47,12 @@ public class UserQueueController {
         .map(AllowedUserResponse::new);
   }
 
+  @GetMapping("/rank")
+  public Mono<RankNumberResponse> getRank(
+      @RequestParam(value = "queue", defaultValue = "default") String queue,
+      @RequestParam("user_id") Long userId
+  ) {
+    return userQueueService.getRank(queue, userId)
+        .map(RankNumberResponse::new);
+  }
 }
